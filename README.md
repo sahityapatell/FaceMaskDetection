@@ -6,11 +6,9 @@ FACEMASK is an advanced, real-time surveillance and detection system designed to
 
 ## 📸 Screenshots
 
-> _Add screenshots to `static/screenshots/` and link them here._
-
-| Hero Page | Image Detection | Video Result |
-|-----------|----------------|--------------|
-| ![hero](static/screenshots/hero.png) | ![image](static/screenshots/image_detection.png) | ![video](static/screenshots/video_result.png) |
+| Hero Page | Image Detection |
+|-----------|----------------|
+| ![hero](static/screenshots/home_page.png) | ![image](static/screenshots/image_detection.png) |
 
 ---
 
@@ -42,29 +40,15 @@ FACEMASK is an advanced, real-time surveillance and detection system designed to
 
 ---
 
-## 🔌 API Endpoints
-
-The Flask backend (`app.py`) exposes the following endpoints:
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/` | Renders the main dashboard user interface (`index.html`). |
-| `GET` | `/video_feed` | Streams the webcam feed with real-time YOLOv8 detections (MJPEG stream). |
-| `POST` | `/detect/image` | Accepts an image upload, performs detection, and saves the annotated result to `static/outputs/`. |
-| `POST` | `/detect/video` | Accepts a video upload, runs frame-by-frame inference, and writes the annotated video to `static/outputs/`. |
-| `GET` | `/download/<filename>` | Serves the processed image or video file as an attachment download. |
-
----
-
 ## 🏷️ Detection Classes
 
 The YOLOv8 model (`model/best.pt`) is trained to detect the following three classes (configured in `data.yaml`):
 
-| Class ID | Class Name | Description | Bounding Box Color |
-|----------|------------|-------------|--------------------|
-| `0` | `with_mask` | Mask worn correctly | Green 🟢 |
-| `1` | `without_mask` | No mask worn | Red 🔴 |
-| `2` | `mask_weared_incorrect` | Mask worn incorrectly (nose/mouth exposed) | Orange 🟠 |
+| Class ID | Class Name | Description |
+|----------|------------|-------------|
+| `0` | `mask_weared_incorrect` | Mask worn incorrectly (nose/mouth exposed) |
+| `1` | `with_mask` | Mask worn correctly |
+| `2` | `without_mask` | No mask worn |
 
 ---
 
@@ -99,10 +83,13 @@ The YOLOv8 model (`model/best.pt`) is trained to detect the following three clas
    ```text
    model/best.pt
    ```
-5. **Start the detection server**:
-   ```bash
-   python app.py
+   ```text
+   pretrained model is available at: https://drive.google.com/file/d/19hGNgffmV2edri_74WZNMT6gT5nht2aO/view?usp=drive_link
    ```
+5. **Start the detection server**:
+     ```bash
+     python app.py
+     ```
    Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your web browser.
 
 ---
@@ -113,10 +100,10 @@ If you want to train the model from scratch on your own dataset:
 1. Organize your dataset folders in YOLO format:
    ```text
    dataset/
-   ├── images/
+       ├── images/
    │   ├── train/
    │   └── val/
-   └── labels/
+       └── labels/
        ├── train/
        └── val/
    ```
