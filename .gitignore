@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# YOLO training output
+runs/
+
+# Uploaded & processed files (keep folder, ignore content)
+static/uploads/*
+static/outputs/*
+!static/uploads/.gitkeep
+!static/outputs/.gitkeep
+
+# Dataset images and labels (too large for git)
+dataset/train/images/*
+dataset/train/labels/*
+dataset/valid/images/*
+dataset/valid/labels/*
+dataset/test/images/*
+dataset/test/labels/*
+!dataset/train/images/.gitkeep
+!dataset/train/labels/.gitkeep
+!dataset/valid/images/.gitkeep
+!dataset/valid/labels/.gitkeep
+!dataset/test/images/.gitkeep
+!dataset/test/labels/.gitkeep
+
+# Trained model weights
+model/best.pt
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

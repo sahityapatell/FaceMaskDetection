@@ -1,0 +1,28 @@
+# data.yaml — YOLOv8 dataset configuration for Face Mask Detection
+#
+# Expected dataset folder layout:
+#   dataset/
+#     images/
+#       train/   ← training images
+#       val/     ← validation images
+#     labels/
+#       train/   ← YOLO-format .txt label files for train
+#       val/     ← YOLO-format .txt label files for val
+#
+# Recommended dataset: https://www.kaggle.com/datasets/andrewmvd/face-mask-detection
+# After downloading, convert Pascal VOC annotations to YOLO format using
+# the conversion script or tools like roboflow.com.
+
+path: dataset          # Root directory of the dataset (relative to project root)
+train: train/images    # Training images (relative to path)
+val: valid/images      # Validation images (relative to path)
+test: test/images      # Test images (relative to path)
+
+# Number of classes
+nc: 3
+
+# Class names — order must match label indices in .txt files
+names:
+  0: mask_weared_incorrect
+  1: with_mask
+  2: without_mask

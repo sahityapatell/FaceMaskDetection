@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Face Mask Detection System</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+
+  <!-- ── HERO ────────────────────────────────────────────────────────────── -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="badge">YOLOv8 · Real-Time · OpenCV</div>
+      <h1>Face Mask<br /><span class="accent">Detection</span></h1>
+      <p class="hero-sub">
+        AI-powered detection system that identifies mask usage in images,
+        videos, and live webcam streams.
+      </p>
+      <div class="hero-chips">
+        <span class="chip chip-green">✓ With Mask</span>
+        <span class="chip chip-red">✗ Without Mask</span>
+        <span class="chip chip-orange">⚠ Worn Incorrectly</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="scan-ring"></div>
+      <div class="scan-ring ring2"></div>
+      <div class="scan-ring ring3"></div>
+      <div class="hero-icon">😷</div>
+    </div>
+  </header>
+
+  <!-- ── FEATURE CARDS ───────────────────────────────────────────────────── -->
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title">What It Can Do</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🖼️</div>
+          <h3>Image Detection</h3>
+          <p>Upload JPG, PNG, WEBP or BMP images. Get instant annotated results with bounding boxes and confidence
+            scores.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎬</div>
+          <h3>Video Detection</h3>
+          <p>Process full video files frame-by-frame. Download the annotated output video with all detections overlaid.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📷</div>
+          <h3>Live Webcam</h3>
+          <p>Real-time mask detection through your webcam. See bounding boxes and labels appear live as you move.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── DASHBOARD ───────────────────────────────────────────────────────── -->
+  <section class="dashboard" id="dashboard">
+    <div class="container">
+      <h2 class="section-title">Detection Dashboard</h2>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for message in messages %}
+              <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn {% if not video %}active{% endif %}" data-tab="image">🖼️ Image</button>
+        <button class="tab-btn {% if video %}active{% endif %}" data-tab="video">🎬 Video</button>
+        <button class="tab-btn" data-tab="webcam">📷 Webcam</button>
+      </div>
+
+      <!-- ── IMAGE TAB ─────────────────────────────────────────────────── -->
+      <div class="tab-panel {% if not video %}active{% endif %}" id="tab-image">
+        <div class="panel-inner">
+          <form action="/detect/image" method="POST" enctype="multipart/form-data" id="image-form" {% if image %}style="display:none"{% endif %}>
+            <div class="upload-zone" id="img-drop-zone">
+              <input type="file" name="file" id="img-input" accept=".jpg,.jpeg,.png,.webp,.bmp" hidden />
+              <div class="upload-icon">📁</div>
+              <p class="upload-title">Drop image here or <span class="link" onclick="document.getElementById('img-input').click()">browse</span></p>
+              <p class="upload-hint">JPG · JPEG · PNG · WEBP · BMP</p>
+            </div>
+
+            <div class="preview-area" id="img-preview-area" style="display:none">
+              <img id="img-preview" src="" alt="Preview" />
+              <div class="preview-controls">
+                <button type="submit" class="btn btn-primary" id="img-detect-btn">Run Detection</button>
+                <button type="button" class="btn btn-ghost" id="img-clear-btn">Clear</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="loader" id="img-loader" style="display:none">
+            <div class="spinner"></div>
+            <p>Running YOLOv8 detection…</p>
+          </div>
+
+          {% if image %}
+          <div class="result-area" id="img-result">
+            <h3 class="result-title">Detection Result</h3>
+            <img id="img-result-img" src="{{ url_for('static', filename=image) }}" alt="Result" />
+            <div class="preview-controls">
+              <a id="img-download-btn" class="btn btn-success" href="{{ url_for('download', filename=image.split('/')[-1]) }}">⬇ Download Result</a>
+              <button type="button" class="btn btn-ghost" onclick="window.location.href='/'">Analyze Another</button>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- ── VIDEO TAB ─────────────────────────────────────────────────── -->
+      <div class="tab-panel {% if video %}active{% endif %}" id="tab-video">
+        <div class="panel-inner">
+          <form action="/detect/video" method="POST" enctype="multipart/form-data" id="video-form" {% if video %}style="display:none"{% endif %}>
+            <div class="upload-zone" id="vid-drop-zone">
+              <input type="file" name="file" id="vid-input" accept=".mp4,.avi,.mov,.mkv" hidden />
+              <div class="upload-icon">🎥</div>
+              <p class="upload-title">Drop video here or <span class="link" onclick="document.getElementById('vid-input').click()">browse</span></p>
+              <p class="upload-hint">MP4 · AVI · MOV · MKV</p>
+            </div>
+
+            <div class="preview-area" id="vid-preview-area" style="display:none">
+              <video id="vid-preview" controls></video>
+              <div class="preview-controls">
+                <button type="submit" class="btn btn-primary" id="vid-detect-btn">Process Video</button>
+                <button type="button" class="btn btn-ghost" id="vid-clear-btn">Clear</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="loader" id="vid-loader" style="display:none">
+            <div class="spinner"></div>
+            <p>Processing frames… this may take a moment.</p>
+          </div>
+
+          {% if video %}
+          <div class="result-area" id="vid-result">
+            <h3 class="result-title">Processed Video</h3>
+            <video id="vid-result-video" src="{{ url_for('static', filename=video) }}" controls></video>
+            <div class="preview-controls">
+              <a id="vid-download-btn" class="btn btn-success" href="{{ url_for('download', filename=video.split('/')[-1]) }}">⬇ Download Video</a>
+              <button type="button" class="btn btn-ghost" onclick="window.location.href='/'">Analyze Another</button>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- ── WEBCAM TAB ─────────────────────────────────────────────────── -->
+      <div class="tab-panel" id="tab-webcam">
+        <div class="panel-inner">
+          <div class="webcam-idle" id="webcam-idle">
+            <div class="upload-icon">📷</div>
+            <p class="upload-title">Live webcam detection</p>
+            <p class="upload-hint">Detections appear in real time via your camera</p>
+            <button class="btn btn-primary" id="webcam-start-btn">Start Webcam</button>
+          </div>
+
+          <div class="webcam-live" id="webcam-live" style="display:none">
+            <img id="webcam-stream" src="" alt="Live stream" />
+            <div class="preview-controls">
+              <button class="btn btn-danger" id="webcam-stop-btn">Stop Webcam</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FOOTER ──────────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="container">
+      <p>Built using <strong>YOLOv8</strong>, <strong>Flask</strong> &amp; <strong>OpenCV</strong></p>
+      <p class="footer-sub">By Sahitya Patel</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/script.js"></script>
+</body>
+
+</html>
