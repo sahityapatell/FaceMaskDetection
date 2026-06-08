@@ -4,6 +4,7 @@ import cv2
 from flask import Flask, render_template, Response, request, jsonify, send_file, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 from ultralytics import YOLO
+import gdown
 
 # ── App setup ──────────────────────────────────────────────────────────────────
 app = Flask(__name__)
@@ -12,6 +13,13 @@ app.secret_key = "mask_detection_secret_key"
 # ── Paths ──────────────────────────────────────────────────────────────────────
 BASE_DIR      = pathlib.Path(__file__).parent
 MODEL_PATH    = BASE_DIR / "model" / "best.pt"
+if not MODEL_PATH.exists():
+    os.makedirs(BASE_DIR / "model", exist_ok=True)
+    gdown.download(
+        "https://drive.google.com/uc?id=19hGNgffmV2edri_74WZNMT6gT5nht2aO",
+        str(MODEL_PATH),
+        quiet=False
+    )
 UPLOAD_FOLDER = BASE_DIR / "static" / "uploads"
 OUTPUT_FOLDER = BASE_DIR / "static" / "outputs"
 
