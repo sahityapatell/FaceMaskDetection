@@ -8,6 +8,7 @@ venv/
 .venv/
 env/
 
+
 # YOLO training output and weights
 runs/
 *.pt
