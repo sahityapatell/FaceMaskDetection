@@ -51,4 +51,4 @@ Example label file content:
 python train_yolo.py
 ```
 
-The best model will be saved to model/best.pt automatically.
+**Note:** The best model will be saved to `model/best.pt` automatically.

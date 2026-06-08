@@ -97,7 +97,7 @@ The YOLOv8 model (`model/best.pt`) is trained to detect the following three clas
 ## 🏋️ Training Your Own Model
 
 If you want to train the model from scratch on your own dataset:
-1. Organize your dataset folders in YOLO format:
+1. Organize your dataset folders(read README.txt in dataset folder) in YOLO format:
    ```text
    dataset/
        ├── images/
