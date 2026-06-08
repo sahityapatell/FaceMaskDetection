@@ -6,9 +6,9 @@ FACEMASK is an advanced, real-time surveillance and detection system designed to
 
 ## 📸 Screenshots
 
-| Hero Page | Image Detection |
+| Home Page | Image Detection |
 |-----------|----------------|
-| ![hero](static/screenshots/home_page.png) | ![image](static/screenshots/image_detection.png) |
+| ![home](static/screenshots/home_page.png) | ![image](static/screenshots/image_detection.png) |
 
 ---
 
