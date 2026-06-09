@@ -16,7 +16,8 @@ MODEL_PATH    = BASE_DIR / "model" / "best.pt"
 if not MODEL_PATH.exists():
     os.makedirs(BASE_DIR / "model", exist_ok=True)
     gdown.download(
-        "https://drive.google.com/uc?id=19hGNgffmV2edri_74WZNMT6gT5nht2aO",
+        "https://drive.google.com/uc?id=1csAZhzCr6qagd2XkE6gzE7kCHnUnWKA9",
+        
         str(MODEL_PATH),
         quiet=False
     )
